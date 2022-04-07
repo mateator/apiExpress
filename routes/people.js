@@ -55,9 +55,10 @@ router.post("/",cors(), function (req, res, next) {
   const data = populationData.population.person.filter(person =>  Object.values(person).some(personObjectData => typeof personObjectData != 'object' ?
    personObjectData.toString().toLowerCase().includes(req.body.textToFilter.toLowerCase()) : Object.values(personObjectData).some(personObjectObjectData => personObjectObjectData.toString().toLowerCase().includes(req.body.textToFilter.toLowerCase()))));
 
-   const paginatedData = data.splice(req.body.offset,req.body.limit);
+   const totalFilteredData = data.length;
+   const paginatedData = data.splice(req.body.limit*req.body.offset,(req.body.limit*req.body.offset) + req.body.limit);
 
-  res.send(paginatedData);
+  res.send({data: paginatedData, total: totalFilteredData});
 });
 
 module.exports = router;
